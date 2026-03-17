@@ -26,27 +26,29 @@ Route::get('/about', [AboutController::class, 'index'])->name('about');
 Route::get('/api/search', [SearchController::class, 'apiSearch'])->name('api.search');
 Route::post('/api/search/increment', [SearchController::class, 'apiIncrement'])->name('api.search.increment');
 
-// ─── Admin Auth Routes (no middleware) ───────────────────────────────────────
+// ─── Admin Routes ────────────────────────────────────────────────────────────
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
+    // Auth (No Middleware)
     Route::get('login',  [AuthController::class, 'showLogin'])->name('login');
     Route::post('login', [AuthController::class, 'login'])->name('login.post');
     Route::post('logout',[AuthController::class, 'logout'])->name('logout');
-});
+    Route::get('logout', [AuthController::class, 'logout']); // Fallback GET logout
 
-// ─── Admin Protected Routes ───────────────────────────────────────────────────
-Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['web', 'auth', 'admin']], function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    // Protected Routes (Auth & Admin Middleware)
+    Route::middleware(['auth', 'admin'])->group(function () {
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('destinations', AdminDestinationController::class)->except(['show']);
-    Route::resource('posts', AdminPostController::class)->except(['show']);
-    Route::resource('categories', AdminCategoryController::class)->except(['show']);
+        Route::resource('destinations', AdminDestinationController::class)->except(['show']);
+        Route::resource('posts', AdminPostController::class)->except(['show']);
+        Route::resource('categories', AdminCategoryController::class)->except(['show']);
 
-    // Pages / Static Content
-    Route::get('pages/{page}/edit',    [PageController::class, 'edit'])->name('pages.edit');
-    Route::post('pages/{page}/update', [PageController::class, 'update'])->name('pages.update');
+        // Pages / Static Content
+        Route::get('pages/{page}/edit',    [PageController::class, 'edit'])->name('pages.edit');
+        Route::post('pages/{page}/update', [PageController::class, 'update'])->name('pages.update');
 
-    // Profile & Password
-    Route::get('profile',          [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::put('profile',          [ProfileController::class, 'update'])->name('profile.update');
-    Route::put('profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+        // Profile & Password
+        Route::get('profile',          [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('profile',          [ProfileController::class, 'update'])->name('profile.update');
+        Route::put('profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+    });
 });
