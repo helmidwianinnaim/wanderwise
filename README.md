@@ -53,5 +53,8 @@ Berikut beberapa tampilan WanderWise:
   <br>
   <em>Dashboard Admin - Semua Kontrol di Sini</em>
 </p>
-Dibuat untuk belajar dan portofolio. Semoga bermanfaat! ✌️
+
+---
+
+Dibuat dengan ❤️ untuk portofolio. Semoga bermanfaat! ✌️
 
