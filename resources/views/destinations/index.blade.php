@@ -180,7 +180,9 @@
 
 {{-- ===== DESTINATION LIST (Landscape) + Sidebar ===== --}}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-            @if ($destinations->count() > 0)
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-10">
+        <div class="lg:col-span-3 space-y-6">
+            @if ($destinations->count() > 0)
                 @foreach ($destinations as $destination)
                 @php
                     $colors = [
