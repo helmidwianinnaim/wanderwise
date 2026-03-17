@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Budget Travel', 'slug' => 'budget-travel', 'color' => '#EF4444'],
         ];
         foreach ($categories as $cat) {
-            Category::create($cat);
+            Category::updateOrCreate(['slug' => $cat['slug']], $cat);
         }
 
         // Destinations - USA
@@ -176,7 +176,7 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach (array_merge($usaDestinations, $europeDestinations) as $dest) {
-            Destination::create($dest);
+            Destination::updateOrCreate(['slug' => $dest['slug']], $dest);
         }
 
         // Posts
@@ -561,7 +561,7 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($posts as $post) {
-            Post::create($post);
+            Post::updateOrCreate(['slug' => $post['slug']], $post);
         }
     }
 }
