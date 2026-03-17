@@ -1,0 +1,107 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@theme {
+    --font-sans: 'Inter', sans-serif;
+    --radius-2xl: 20px;
+
+    --color-brand-blue: #0EA5E9;
+    --color-brand-purple: #8B5CF6;
+    --color-brand-amber: #F59E0B;
+    --color-brand-green: #10B981;
+    --color-brand-red: #EF4444;
+    --color-brand-pink: #EC4899;
+}
+
+@layer base {
+    * {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    html {
+        scroll-behavior: smooth;
+    }
+}
+
+@layer components {
+    .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        background-color: #0EA5E9;
+        color: white;
+        font-weight: 600;
+        border-radius: 20px;
+        transition: all 0.2s;
+        box-shadow: 0 10px 15px -3px rgb(14 165 233 / 0.3);
+    }
+    .btn-primary:hover {
+        background-color: #0284c7;
+        box-shadow: 0 10px 15px -3px rgb(14 165 233 / 0.5);
+        transform: translateY(-2px);
+    }
+    .btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        background-color: rgb(255 255 255 / 0.1);
+        color: white;
+        font-weight: 600;
+        border-radius: 20px;
+        border: 1px solid rgb(255 255 255 / 0.2);
+        transition: all 0.2s;
+        backdrop-filter: blur(4px);
+    }
+    .btn-secondary:hover {
+        background-color: rgb(255 255 255 / 0.2);
+        transform: translateY(-2px);
+    }
+    .btn-outline {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border: 2px solid #0EA5E9;
+        color: #0EA5E9;
+        font-weight: 600;
+        border-radius: 20px;
+        transition: all 0.2s;
+    }
+    .btn-outline:hover {
+        background-color: #0EA5E9;
+        color: white;
+    }
+    .card {
+        background-color: white;
+        border-radius: 20px;
+        box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        border: 1px solid rgb(243 244 246);
+        transition: all 0.3s;
+    }
+    .card:hover {
+        box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        transform: translateY(-4px);
+    }
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+    .section-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: rgb(17 24 39);
+        letter-spacing: -0.025em;
+    }
+    .section-subtitle {
+        color: rgb(107 114 128);
+        margin-top: 0.75rem;
+        font-size: 1.125rem;
+        line-height: 1.75;
+    }
+}
