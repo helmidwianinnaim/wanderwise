@@ -109,7 +109,7 @@
                          onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($post->title) }}&background=7c3aed&color=fff'">
                     <div class="flex-1 min-w-0">
                         <p class="text-sm font-medium text-slate-800 truncate">{{ $post->title }}</p>
-                        <p class="text-xs text-slate-400">{{ $post->author }} · {{ $post->read_time }} min</p>
+                        <p class="text-xs text-slate-400">{{ $post->category?->name ?? 'Uncategorized' }} · {{ $post->author }} · {{ $post->read_time }} min</p>
                     </div>
                     @if($post->featured)
                     <span class="text-xs bg-violet-100 text-violet-700 px-2 py-0.5 rounded-full font-medium">Featured</span>

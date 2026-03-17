@@ -12,11 +12,11 @@ class DashboardController extends Controller
     public function index()
     {
         $stats = [
-            'destinations' => Destination::count(),
-            'posts'        => Post::count(),
-            'categories'   => Category::count(),
-            'featured_destinations' => Destination::where('featured', true)->count(),
-            'featured_posts'        => Post::where('featured', true)->count(),
+            'destinations' => (int) Destination::count(),
+            'posts'        => (int) Post::count(),
+            'categories'   => (int) Category::count(),
+            'featured_destinations' => (int) Destination::where('featured', true)->count(),
+            'featured_posts'        => (int) Post::where('featured', true)->count(),
         ];
 
         $recentDestinations = Destination::latest()->take(5)->get();
