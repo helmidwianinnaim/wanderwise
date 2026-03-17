@@ -26,21 +26,22 @@ Route::get('/debug-db', function() {
     try {
         $hasSessionsTable = \Illuminate\Support\Facades\Schema::hasTable('sessions');
         $users = \App\Models\User::all();
-        $sessions = $hasSessionsTable ? \Illuminate\Support\Facades\DB::table('sessions')->latest('last_activity')->limit(5)->get() : [];
+        $sessions = $hasSessionsTable ? \Illuminate\Support\Facades\DB::table('sessions')->latest('last_activity')->limit(3)->get() : [];
         
         return [
             'database_connected' => true,
             'sessions_table_exists' => $hasSessionsTable,
             'user_count' => $users->count(),
             'users' => $users->map(fn($u) => ['id' => $u->id, 'email' => $u->email, 'is_admin' => $u->is_admin]),
-            'sessions' => $sessions,
+            'sessions_in_db' => $sessions,
+            'current_session_id' => session()->getId(),
             'app_url' => config('app.url'),
             'session_driver' => config('session.driver'),
             'session_secure' => config('session.secure'),
-            'current_session_id' => session()->getId(),
+            'session_cookie_name' => config('session.cookie'),
         ];
     } catch (\Exception $e) {
-        return ['error' => $e->getMessage()];
+        return ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()];
     }
 });
 
