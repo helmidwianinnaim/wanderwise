@@ -6,12 +6,25 @@ use Illuminate\Database\Seeder;
 use App\Models\Category;
 use App\Models\Destination;
 use App\Models\Post;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        // Admin User
+        User::updateOrCreate(
+            ['email' => 'admin@wanderwise.com'],
+            [
+                'name'     => 'Admin WanderWise',
+                'email'    => 'admin@wanderwise.com',
+                'password' => Hash::make('admin123'),
+                'is_admin' => true,
+            ]
+        );
+
         // Categories
         $categories = [
             ['name' => 'Travel Tips',   'slug' => 'travel-tips',   'color' => '#0EA5E9'],
