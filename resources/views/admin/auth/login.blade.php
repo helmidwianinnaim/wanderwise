@@ -28,9 +28,6 @@
                 </div>
                 <h2 class="text-2xl font-bold text-white tracking-tight">WanderWise Admin</h2>
                 <p class="text-slate-400 text-sm mt-1">Silakan masuk untuk mengelola konten</p>
-                <div class="mt-2 text-[10px] text-slate-500 uppercase tracking-widest font-mono">
-                    DEBUG: driver:{{ config('session.driver') }} | secure:{{ config('session.secure') ? 'YES' : 'NO' }}
-                </div>
             </div>
 
             {{-- Error --}}

@@ -22,62 +22,6 @@ Route::get('/blog', [PostController::class, 'index'])->name('posts.index');
 Route::get('/blog/{slug}', [PostController::class, 'show'])->name('posts.show');
 Route::get('/about', [AboutController::class, 'index'])->name('about');
 
-Route::get('/debug-db', function() {
-    try {
-        $hasSessionsTable = \Illuminate\Support\Facades\Schema::hasTable('sessions');
-        $users = \App\Models\User::all();
-        $sessions = $hasSessionsTable ? \Illuminate\Support\Facades\DB::table('sessions')->latest('last_activity')->limit(3)->get() : [];
-        
-        return [
-            'database_connected' => true,
-            'sessions_table_exists' => $hasSessionsTable,
-            'user_count' => $users->count(),
-            'users' => $users->map(fn($u) => ['id' => $u->id, 'email' => $u->email, 'is_admin' => $u->is_admin]),
-            'sessions_in_db' => $sessions,
-            'current_session_id' => session()->getId(),
-            'app_url' => config('app.url'),
-            'session_driver' => config('session.driver'),
-            'session_secure' => config('session.secure'),
-            'session_cookie_name' => config('session.cookie'),
-        ];
-    } catch (\Exception $e) {
-        return ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()];
-    }
-});
-
-Route::get('/force-login', function() {
-    $user = \App\Models\User::where('is_admin', true)->first();
-    if ($user) {
-        \Illuminate\Support\Facades\Auth::login($user);
-        session()->put('force_login_at', now()->toDateTimeString());
-        session()->save(); // Force save
-        return [
-            'status' => 'success',
-            'message' => 'Logged in as ' . $user->email,
-            'redirect_url' => route('admin.dashboard'),
-            'session_id' => session()->getId(),
-            'instructions' => 'Now please visit /check-auth to see if this stuck.'
-        ];
-    }
-    return "No admin user found!";
-});
-
-Route::get('/check-auth', function() {
-    $isLoggedIn = \Illuminate\Support\Facades\Auth::check();
-    $user = $isLoggedIn ? \Illuminate\Support\Facades\Auth::user() : null;
-    
-    return [
-        'logged_in' => $isLoggedIn,
-        'user_id' => $user ? $user->id : null,
-        'is_admin' => $user ? $user->is_admin : null,
-        'session_id' => session()->getId(),
-        'force_login_at' => session()->get('force_login_at'),
-        'cookies' => $_COOKIE,
-        'config_driver' => config('session.driver'),
-        'config_secure' => config('session.secure'),
-    ];
-});
-
 // API Routes for Live Search
 Route::get('/api/search', [SearchController::class, 'apiSearch'])->name('api.search');
 Route::post('/api/search/increment', [SearchController::class, 'apiIncrement'])->name('api.search.increment');
