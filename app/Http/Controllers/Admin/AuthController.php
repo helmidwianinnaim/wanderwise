@@ -19,7 +19,7 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        Log::info('Login attempt for email: ' . $request->email);
+        error_log('[WanderWise DEBUG] Login attempt for email: ' . $request->email);
 
         $credentials = $request->validate([
             'email'    => 'required|email',
@@ -27,20 +27,24 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
-            Log::info('Login success for user: ' . Auth::user()->id . ' (Is Admin: ' . (Auth::user()->is_admin ? 'Yes' : 'No') . ')');
+            $user = Auth::user();
+            error_log('[WanderWise DEBUG] Login SUCCESS for user: ' . $user->id . ' (Is Admin: ' . ($user->is_admin ? 'Yes' : 'No') . ')');
             
-            if (!Auth::user()->is_admin) {
-                Log::warning('Login blocked: User is not admin.');
+            if (!$user->is_admin) {
+                error_log('[WanderWise DEBUG] Login BLOCKED: User is not admin.');
                 Auth::logout();
                 return back()->withErrors(['email' => 'Akses ditolak. Bukan admin.']);
             }
             
-            $request->session()->regenerate();
-            Log::info('Session regenerated. Redirecting to dashboard.');
+            // Temporary: Disable regeneration to avoid cookie issues on proxy
+            // $request->session()->regenerate();
+            
+            error_log('[WanderWise DEBUG] Session ID after login: ' . session()->getId());
+            error_log('[WanderWise DEBUG] Redirecting to dashboard...');
             return redirect()->route('admin.dashboard');
         }
 
-        Log::error('Login failed for email: ' . $request->email);
+        error_log('[WanderWise DEBUG] Login FAILED for email: ' . $request->email);
         return back()->withErrors(['email' => 'Email atau password salah.'])->withInput();
     }
 
