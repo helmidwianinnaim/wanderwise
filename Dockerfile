@@ -35,7 +35,10 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 # Expose port (Railway uses $PORT)
 EXPOSE 80
 
-# Start Laravel (Automated Database Setup & Server Startup)
-CMD php artisan migrate --force && \
+# Start Laravel (Automated Cache Clearing, Database Setup & Server Startup)
+CMD php artisan config:clear && \
+    php artisan route:clear && \
+    php artisan view:clear && \
+    php artisan migrate --force && \
     php artisan db:seed --force && \
     php artisan serve --host=0.0.0.0 --port=$PORT
