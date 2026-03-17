@@ -36,10 +36,36 @@ Route::get('/debug-db', function() {
             'admin_is_admin' => $adminUser ? $adminUser->is_admin : null,
             'app_url' => config('app.url'),
             'session_driver' => config('session.driver'),
+            'session_secure' => config('session.secure'),
         ];
     } catch (\Exception $e) {
         return ['error' => $e->getMessage()];
     }
+});
+
+Route::get('/force-login', function() {
+    $user = \App\Models\User::where('is_admin', true)->first();
+    if ($user) {
+        \Illuminate\Support\Facades\Auth::login($user);
+        return redirect()->route('admin.dashboard');
+    }
+    return "No admin user found! Please run migrations/seeders.";
+});
+
+Route::get('/check-auth', function() {
+    if (\Illuminate\Support\Facades\Auth::check()) {
+        $user = \Illuminate\Support\Facades\Auth::user();
+        return [
+            'logged_in' => true,
+            'user_id' => $user->id,
+            'is_admin' => $user->is_admin,
+            'session_id' => session()->getId()
+        ];
+    }
+    return [
+        'logged_in' => false,
+        'session_id' => session()->getId()
+    ];
 });
 
 // API Routes for Live Search
