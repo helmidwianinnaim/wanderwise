@@ -225,7 +225,7 @@
                     </div>
 
                     {{-- Content --}}
-                    <div class="flex-1 p-5 sm:p-6 flex flex-col justify-between">
+                    <div class="flex-1 p-5 sm:p-6 flex flex-col justify-between min-w-0">
                         <div>
                             <div class="flex items-start justify-between gap-3 mb-2">
                                 <div>
