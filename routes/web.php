@@ -25,18 +25,19 @@ Route::get('/about', [AboutController::class, 'index'])->name('about');
 Route::get('/debug-db', function() {
     try {
         $hasSessionsTable = \Illuminate\Support\Facades\Schema::hasTable('sessions');
-        $userCount = \App\Models\User::count();
-        $adminUser = \App\Models\User::where('email', 'admin@wanderwise.com')->first();
+        $users = \App\Models\User::all();
+        $sessions = $hasSessionsTable ? \Illuminate\Support\Facades\DB::table('sessions')->latest('last_activity')->limit(5)->get() : [];
         
         return [
             'database_connected' => true,
             'sessions_table_exists' => $hasSessionsTable,
-            'user_count' => $userCount,
-            'admin_exists' => !!$adminUser,
-            'admin_is_admin' => $adminUser ? $adminUser->is_admin : null,
+            'user_count' => $users->count(),
+            'users' => $users->map(fn($u) => ['id' => $u->id, 'email' => $u->email, 'is_admin' => $u->is_admin]),
+            'sessions' => $sessions,
             'app_url' => config('app.url'),
             'session_driver' => config('session.driver'),
             'session_secure' => config('session.secure'),
+            'current_session_id' => session()->getId(),
         ];
     } catch (\Exception $e) {
         return ['error' => $e->getMessage()];
