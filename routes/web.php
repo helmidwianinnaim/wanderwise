@@ -47,24 +47,32 @@ Route::get('/force-login', function() {
     $user = \App\Models\User::where('is_admin', true)->first();
     if ($user) {
         \Illuminate\Support\Facades\Auth::login($user);
-        return redirect()->route('admin.dashboard');
+        session()->put('force_login_at', now()->toDateTimeString());
+        session()->save(); // Force save
+        return [
+            'status' => 'success',
+            'message' => 'Logged in as ' . $user->email,
+            'redirect_url' => route('admin.dashboard'),
+            'session_id' => session()->getId(),
+            'instructions' => 'Now please visit /check-auth to see if this stuck.'
+        ];
     }
-    return "No admin user found! Please run migrations/seeders.";
+    return "No admin user found!";
 });
 
 Route::get('/check-auth', function() {
-    if (\Illuminate\Support\Facades\Auth::check()) {
-        $user = \Illuminate\Support\Facades\Auth::user();
-        return [
-            'logged_in' => true,
-            'user_id' => $user->id,
-            'is_admin' => $user->is_admin,
-            'session_id' => session()->getId()
-        ];
-    }
+    $isLoggedIn = \Illuminate\Support\Facades\Auth::check();
+    $user = $isLoggedIn ? \Illuminate\Support\Facades\Auth::user() : null;
+    
     return [
-        'logged_in' => false,
-        'session_id' => session()->getId()
+        'logged_in' => $isLoggedIn,
+        'user_id' => $user ? $user->id : null,
+        'is_admin' => $user ? $user->is_admin : null,
+        'session_id' => session()->getId(),
+        'force_login_at' => session()->get('force_login_at'),
+        'cookies' => $_COOKIE,
+        'config_driver' => config('session.driver'),
+        'config_secure' => config('session.secure'),
     ];
 });
 
