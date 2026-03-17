@@ -31,7 +31,7 @@
         <div>
             <p class="text-sky-500 text-xs font-bold uppercase tracking-widest mb-3">{{ $storyTitle }}</p>
             <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight mb-5">
-                {!! nl2br(e($heroTitle)) !!}
+                {!! $heroTitle !!}
             </h1>
             <p class="text-gray-500 text-base leading-relaxed mb-4">{{ $heroSubtitle }}</p>
             @if($storyText)
