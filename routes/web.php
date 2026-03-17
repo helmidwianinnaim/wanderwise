@@ -22,6 +22,26 @@ Route::get('/blog', [PostController::class, 'index'])->name('posts.index');
 Route::get('/blog/{slug}', [PostController::class, 'show'])->name('posts.show');
 Route::get('/about', [AboutController::class, 'index'])->name('about');
 
+Route::get('/debug-db', function() {
+    try {
+        $hasSessionsTable = \Illuminate\Support\Facades\Schema::hasTable('sessions');
+        $userCount = \App\Models\User::count();
+        $adminUser = \App\Models\User::where('email', 'admin@wanderwise.com')->first();
+        
+        return [
+            'database_connected' => true,
+            'sessions_table_exists' => $hasSessionsTable,
+            'user_count' => $userCount,
+            'admin_exists' => !!$adminUser,
+            'admin_is_admin' => $adminUser ? $adminUser->is_admin : null,
+            'app_url' => config('app.url'),
+            'session_driver' => config('session.driver'),
+        ];
+    } catch (\Exception $e) {
+        return ['error' => $e->getMessage()];
+    }
+});
+
 // API Routes for Live Search
 Route::get('/api/search', [SearchController::class, 'apiSearch'])->name('api.search');
 Route::post('/api/search/increment', [SearchController::class, 'apiIncrement'])->name('api.search.increment');
